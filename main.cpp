@@ -2,10 +2,11 @@
 #include "longint.h"
 
 int main() {
-    longint number1(237123);
-    longint number2("2354");
-    longint number3 = number1 * number2;
-    cout << number3;
+    longint a;
+    longint number1("4111");
+    longint number2("60017001");
+    longint number3 = Karatsuba(number1, number2);
     cout << endl;
+    cout<<number3;
     return 0;
 }

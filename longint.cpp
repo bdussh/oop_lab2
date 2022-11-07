@@ -1,3 +1,4 @@
+#include <cmath>
 #include "longint.h"
 
 int lenOfNum(int a) {
@@ -48,7 +49,7 @@ longint::longint(const string &number) {
 ostream &operator<<(ostream &out, const longint &number) {
     int length = number.digits.size();
 
-    out << number.digits[length - 1] << " ";
+    out << number.digits[length - 1];
     for (int i = length - 2; i >= 0; --i) {
         bool breaker = false;
         for (int j = 1; j < number.digit_len; j++) {
@@ -59,7 +60,7 @@ ostream &operator<<(ostream &out, const longint &number) {
                 breaker = true;
             }
         }
-        out << number.digits[i] << " ";
+        out << number.digits[i];
     }
     return out;
 }
@@ -168,3 +169,63 @@ longint longint::operator*(const longint &number) {
     }
     return result;
 }
+
+longint shift(longint n, int length){
+    vector<int> insert;
+    for(int i =0; i<length; i++)
+        insert.push_back(0);
+    n.digits.insert(n.digits.begin(),  insert.begin(), insert.end());
+    return n;
+}
+
+pair<longint, longint> split(longint x, int n) {
+    longint firstHalf;
+    longint secondHalf;
+    int i = 0;
+    for (; i <= n/2; i++) {
+        if(x.digits.size() <= i){
+            firstHalf.digits.push_back(0);
+        }
+        else{
+            firstHalf.digits.push_back(x.digits[i]);
+        }
+    }
+    for(; i<n;i++){
+        if(x.digits.size() <= i){
+            secondHalf.digits.push_back(0);
+        }
+        else{
+            secondHalf.digits.push_back(x.digits[i]);
+        }
+    }
+    return pair(firstHalf, secondHalf);
+}
+
+
+
+longint Karatsuba(longint x, longint y) {
+    if(x.digits.size() <= 1 || y.digits.size() <=1){
+        return x*y;
+    }
+    int n = max(x.digits.size(), y.digits.size());
+    pair<longint, longint> pair1 = split(x, n);
+    pair<longint, longint> pair2 = split(y, n);
+
+    longint a = pair1.first;
+    longint b = pair1.second;
+    longint c = pair2.first;
+    longint d = pair2.second;
+
+//    longint c_0 = Karatsuba(a,c);
+//    longint c_1 = Karatsuba(b,d);
+//    longint c_2 = Karatsuba(a+b,c+d) - c_0 - c_1;
+
+    longint c_0 = a*c;
+    longint c_1 = b*d;
+    longint c_2 = (a+b)*(c+d) - c_0 - c_1;
+    longint e = shift(c_1, (n + 1) / 2) + c_2;
+
+    return shift(e, (n + 1) / 2) + c_0;
+}
+
+
