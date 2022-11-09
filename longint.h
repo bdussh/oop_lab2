@@ -7,16 +7,16 @@
 
 using namespace std;
 
-class longint {
+class longint  {
 private:
 
 
 public:
 
     vector<int> digits;
-    int digit_len = 2; //if not decimal system set as 1; because you will get into some problems, believe me!!!
+    int digit_len = 1; //if not decimal system set as 1; because you will get into some problems, believe me!!!
     int base = 10;
-    int digit_base = (int) pow(digit_len, base);
+    int digit_base = (int) pow(base, digit_len);
 
     longint(const char *number);
 
@@ -42,7 +42,11 @@ public:
 
     friend longint Karatsuba(longint x, longint y);
 
-    friend pair<longint, longint> split(longint x, int n);
+    friend longint ToomCook(longint x, longint y);
+
+    friend longint power(longint x, int power);
+
 };
 
+vector<longint> split3(longint x, int n);
 #endif //LAB2_LONGINT_H
